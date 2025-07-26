@@ -1,52 +1,114 @@
-import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import DashboardLayout from '../../components/DashboardLayout';
-
+import { motion } from 'framer-motion';
 
 function CustomerDashboard() {
   const user = JSON.parse(localStorage.getItem('user'));
+  const [bookings, setBookings] = useState([]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    axios.get('http://localhost:5000/api/bookings/my-bookings', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      setBookings(res.data);
+    }).catch((err) => {
+      console.error('Failed to fetch bookings:', err);
+    });
+  }, []);
+
+  // Derived stats
+  const totalBookings = bookings.length;
+  const totalSpent = bookings.reduce((sum, b) => sum + (b.event?.price || 0) * b.quantity, 0);
+  const upcomingEvents = bookings.filter(b => new Date(b.event?.date) > new Date()).length;
 
   return (
-        <DashboardLayout role="customer">
+    <DashboardLayout role="customer">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-gray-50 to-blue-50 p-6 sm:p-8 lg:p-12">
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="max-w-7xl mx-auto"
+        >
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-indigo-800 tracking-tight">
+            Welcome, {user?.name || 'Customer'}!
+          </h1>
+          <p className="mt-3 text-lg text-gray-600 font-medium">
+            Your event summary at a glance
+          </p>
 
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="max-w-7xl mx-auto"
-      >
-        <h1 className="text-4xl font-extrabold text-gray-900 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
-          Customer Dashboard
-        </h1>
-        <p className="mt-2 text-lg text-gray-600 font-medium">
-          Welcome, {user?.name || 'Customer'}!
-        </p>
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <DashboardCard title="Total Bookings" value={totalBookings} icon="🎫" color="indigo" />
+            <DashboardCard title="Upcoming Events" value={upcomingEvents} icon="📅" color="blue" />
+            <DashboardCard title="Total Spent" value={`$${totalSpent.toFixed(2)}`} icon="💰" color="teal" />
+          </div>
 
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <DashboardCard title="My Tickets" value="3" icon="🎫" />
-          <DashboardCard title="Upcoming Events" value="2" icon="📅" />
-          <DashboardCard title="Total Spent" value="$230" icon="💰" />
-        </div>
-      </motion.div>
-    </div>
-        </DashboardLayout>
-
+          {bookings.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mt-12 bg-white rounded-2xl shadow-lg p-6 sm:p-8"
+            >
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">Recent Bookings</h2>
+              <div className="space-y-4">
+                {bookings.slice(0, 3).map((booking) => (
+                  <motion.div
+                    key={booking._id}
+                    whileHover={{ scale: 1.02 }}
+                    className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gray-50 p-4 rounded-lg border border-gray-200 hover:border-indigo-300 transition-colors"
+                  >
+                    <div className="mb-3 sm:mb-0">
+                      <p className="text-gray-800 font-semibold">{booking.event?.title || 'Unknown Event'}</p>
+                      <p className="text-sm text-gray-600">
+                        <span className="font-medium">Date:</span>{' '}
+                        {new Date(booking.event?.date).toLocaleDateString('en-US', {
+                          month: 'long',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        <span className="font-medium">Quantity:</span> {booking.quantity}
+                      </p>
+                    </div>
+                    <p className="text-sm font-medium text-indigo-600">
+                      ${(booking.event?.price || 0) * booking.quantity}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </motion.div>
+      </div>
+    </DashboardLayout>
   );
 }
 
-function DashboardCard({ title, value, icon }) {
+function DashboardCard({ title, value, icon, color }) {
+  const colorStyles = {
+    indigo: 'bg-indigo-100 text-indigo-600 border-indigo-200 hover:border-indigo-400',
+    blue: 'bg-blue-100 text-blue-600 border-blue-200 hover:border-blue-400',
+    teal: 'bg-teal-100 text-teal-600 border-teal-200 hover:border-teal-400',
+  };
+
   return (
     <motion.div
-      whileHover={{ scale: 1.03, boxShadow: "0px 10px 20px rgba(0,0,0,0.1)" }}
-      transition={{ type: "spring", stiffness: 400, damping: 10 }}
-      className="relative bg-white p-6 rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:border-indigo-200 transition-all duration-300"
+      whileHover={{ scale: 1.05, y: -5 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+      className={`bg-white p-6 rounded-2xl shadow-lg border ${colorStyles[color]} transition-all duration-300`}
     >
-      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-bl-full opacity-50" />
       <div className="flex items-center space-x-4">
-        <div className="text-3xl">{icon}</div>
+        <div className="text-4xl">{icon}</div>
         <div>
-          <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
-          <p className="text-3xl font-bold text-indigo-600 mt-1">{value}</p>
+          <h2 className="text-lg font-semibold text-gray-700">{title}</h2>
+          <p className="text-3xl font-bold">{value}</p>
         </div>
       </div>
     </motion.div>

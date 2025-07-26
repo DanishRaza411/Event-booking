@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import PendingEvents from '../../components/PendingEvents';
+
+
+
 
 function AdminDashboard() {
   const [users, setUsers] = useState([]);
@@ -70,8 +74,13 @@ function AdminDashboard() {
   };
 
   return (
+
+    
+<>
+    <PendingEvents />
     <div className="p-8 min-h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold text-indigo-700 mb-6">Admin Dashboard</h1>
+    
+      <h1 className="text-3xl font-bold text-indigo-700 mb-6">User List</h1>
 
       <table className="w-full bg-white shadow rounded-lg overflow-hidden">
         <thead className="bg-indigo-50 text-indigo-700">
@@ -147,6 +156,7 @@ function AdminDashboard() {
         </tbody>
       </table>
     </div>
+    </>
   );
 }
 

@@ -1,5 +1,5 @@
 import express from 'express';
-import { createEvent, getAllEvents, getMyEvents} from '../controllers/eventController.js';
+import { createEvent, getAllEvents, getMyEvents, getPendingEvents, updateEventStatus} from '../controllers/eventController.js';
 import { verifyToken, authorizeRoles } from '../middlewares/auth.js';
 
 
@@ -9,6 +9,9 @@ const router = express.Router();
 router.post('/', verifyToken, authorizeRoles('organizer'), createEvent);
 router.get('/my-events', verifyToken, authorizeRoles('organizer'), getMyEvents);
 router.get('/', getAllEvents); // ⬅️ This is the new public route
+
+router.get('/pending', verifyToken, authorizeRoles('admin'), getPendingEvents);
+router.patch('/:id/status', verifyToken, authorizeRoles('admin'), updateEventStatus);
 
 
 export default router;

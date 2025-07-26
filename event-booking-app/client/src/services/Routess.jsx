@@ -8,6 +8,7 @@ import OrganizerDashboard from '..//pages/dashboard/OrganizerDashboard';
 import CustomerDashboard from '../pages/dashboard/CustomerDashboard';
 import OrganizerEventForm from '../pages/organizer/OrganizerEventForm';
 import OrganizerEvents from '../pages/organizer/OrganizerEvents';
+import BrowseEvents from '../components/BrowseEvents';
 
 
 
@@ -54,6 +55,8 @@ function Routess() {
       {/* Optional fallback */}
       <Route path="*" element={<div>404 Not Found</div>} />
       <Route path="/unauthorized" element={<div>Unauthorized Access</div>} />
+      <Route path="/events" element={<BrowseEvents />} />
+
     </Routes>
     </Router>
   );

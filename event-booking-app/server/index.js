@@ -8,6 +8,7 @@ import cors from "cors"
 import authRoutes from './routes/auth.js';
 import eventRoutes from './routes/eventRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import bookingRoutes from './routes/bookingRoutes.js';
 
 
 
@@ -19,6 +20,8 @@ app.use(express.json());
 app.use('/api/users', userRoutes); 
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/bookings', bookingRoutes);
+
 
 
 app.get('/', (req, res) => {
