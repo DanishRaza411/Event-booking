@@ -10,6 +10,7 @@ import OrganizerEventForm from '../pages/organizer/OrganizerEventForm';
 import OrganizerEvents from '../pages/organizer/OrganizerEvents';
 import BrowseEvents from '../components/BrowseEvents';
 
+import CustomerBookings from '../pages/Customer/CustomerBookings';
 
 
 
@@ -49,6 +50,10 @@ function Routess() {
 
       <Route path="/organizer/submit-event" element={<OrganizerEventForm />} />
       <Route path="/dashboard/organizer/events" element={<OrganizerEvents />} />
+
+      // customer bookings
+      <Route path="/customer/bookings" element={<CustomerBookings />} />
+
 
 
 

@@ -24,12 +24,18 @@ export const bookEvent = async (req, res) => {
 };
 
 
+// GET /api/bookings/my-bookings
 export const getMyBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find({ user: req.user.id }).populate('event');
-    res.json(bookings);
+    const bookings = await Booking.find({ user: req.user.id }).populate({
+      path: 'event',
+      select: 'title date price',
+    });
+
+    res.status(200).json(bookings);
   } catch (error) {
-    console.error('Get My Bookings Error:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Error in getMyBookings:', error);
+    res.status(500).json({ message: 'Failed to fetch bookings' });
   }
 };
+

@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../../components/DashboardLayout';
 import { motion } from 'framer-motion';
 
 function CustomerDashboard() {
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user'));
   const [bookings, setBookings] = useState([]);
 
@@ -19,8 +21,9 @@ function CustomerDashboard() {
       console.error('Failed to fetch bookings:', err);
     });
   }, []);
+console.log('Fetched Bookings:', bookings);
 
-  // Derived stats
+
   const totalBookings = bookings.length;
   const totalSpent = bookings.reduce((sum, b) => sum + (b.event?.price || 0) * b.quantity, 0);
   const upcomingEvents = bookings.filter(b => new Date(b.event?.date) > new Date()).length;
@@ -42,9 +45,25 @@ function CustomerDashboard() {
           </p>
 
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <DashboardCard title="Total Bookings" value={totalBookings} icon="🎫" color="indigo" />
-            <DashboardCard title="Upcoming Events" value={upcomingEvents} icon="📅" color="blue" />
-            <DashboardCard title="Total Spent" value={`$${totalSpent.toFixed(2)}`} icon="💰" color="teal" />
+            <DashboardCard
+              title="Total Bookings"
+              value={totalBookings}
+              icon="🎫"
+              color="indigo"
+              onClick={() => navigate('/customer/bookings')}
+            />
+            <DashboardCard
+              title="Upcoming Events"
+              value={upcomingEvents}
+              icon="📅"
+              color="blue"
+            />
+            <DashboardCard
+              title="Total Spent"
+              value={`$${totalSpent.toFixed(2)}`}
+              icon="💰"
+              color="teal"
+            />
           </div>
 
           {bookings.length > 0 && (
@@ -90,7 +109,7 @@ function CustomerDashboard() {
   );
 }
 
-function DashboardCard({ title, value, icon, color }) {
+function DashboardCard({ title, value, icon, color, onClick }) {
   const colorStyles = {
     indigo: 'bg-indigo-100 text-indigo-600 border-indigo-200 hover:border-indigo-400',
     blue: 'bg-blue-100 text-blue-600 border-blue-200 hover:border-blue-400',
@@ -102,7 +121,8 @@ function DashboardCard({ title, value, icon, color }) {
       whileHover={{ scale: 1.05, y: -5 }}
       whileTap={{ scale: 0.98 }}
       transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-      className={`bg-white p-6 rounded-2xl shadow-lg border ${colorStyles[color]} transition-all duration-300`}
+      className={`bg-white p-6 rounded-2xl shadow-lg border ${colorStyles[color]} transition-all duration-300 cursor-pointer`}
+      onClick={onClick}
     >
       <div className="flex items-center space-x-4">
         <div className="text-4xl">{icon}</div>
