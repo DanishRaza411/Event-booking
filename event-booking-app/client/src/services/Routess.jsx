@@ -12,6 +12,9 @@ import BrowseEvents from '../components/BrowseEvents';
 
 import CustomerBookings from '../pages/Customer/CustomerBookings';
 
+import AdminUsers from '../pages/Admin/Users';
+import AdminEvents from '../pages/Admin/Events';
+
 
 
 
@@ -55,7 +58,9 @@ function Routess() {
       <Route path="/customer/bookings" element={<CustomerBookings />} />
 
 
-
+      // admin events and user router
+      <Route path="/admin/users" element={<AdminUsers />} />
+      <Route path="/admin/events" element={<AdminEvents />} />
 
       {/* Optional fallback */}
       <Route path="*" element={<div>404 Not Found</div>} />

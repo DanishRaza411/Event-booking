@@ -15,7 +15,7 @@ const DashboardLayout = ({ children, role }) => {
     ],
     customer: [
       { name: 'Dashboard', path: '/customer/dashboard' },
-      { name: 'My Tickets', path: '/customer/tickets' },
+      { name: 'My Bookings', path: '/customer/bookings' },
       { name: 'Browse Events', path: '/events' },
     ],
   };

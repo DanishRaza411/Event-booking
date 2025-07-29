@@ -78,6 +78,18 @@ export const updateEventStatus = async (req, res) => {
   }
 };
 
+// delete event
+export const deleteEvent = async (req, res) => {
+  try {
+    await Event.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Event deleted successfully.' });
+  } catch (err) {
+    console.error('Delete Event Error:', err);
+    res.status(500).json({ message: 'Failed to delete event.' });
+  }
+};
+
+
 
 // export const approveEvent = async (req, res) => {
 //   try {

@@ -24,14 +24,22 @@ function CustomerBookings() {
       ) : (
         <ul className="space-y-4">
           {bookings.map(booking => (
-            <li key={booking._id} className="p-4 bg-white shadow rounded-xl">
-              <h3 className="text-xl font-semibold">{booking.event.title}</h3>
-              <p>Date: {new Date(booking.event.date).toLocaleString()}</p>
-              <p>Location: {booking.event.location}</p>
-              <p>Quantity: {booking.quantity}</p>
-              <p>Total Price: Rs. {booking.totalPrice}</p>
-            </li>
-          ))}
+  booking.event ? (
+    <li key={booking._id} className="p-4 bg-white shadow rounded-xl">
+      <h3 className="text-xl font-semibold">{booking.event.title}</h3>
+      <p>Date: {new Date(booking.event.date).toLocaleString()}</p>
+      <p>Location: {booking.event.location}</p>
+      <p>Quantity: {booking.quantity}</p>
+      <p>Total Price: Rs. {booking.totalPrice}</p>
+    </li>
+  ) : (
+    <></>
+    // <li key={booking._id} className="border-2 p-4 bg-yellow-100 text-yellow-800 rounded-xl">
+    //   <p>This Event has been deleted because it has already happened.</p>
+    // </li>
+  )
+))}
+
         </ul>
       )}
     </div>

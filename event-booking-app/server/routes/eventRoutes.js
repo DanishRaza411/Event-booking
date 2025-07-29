@@ -1,7 +1,7 @@
 import express from 'express';
 import { createEvent, getAllEvents, getMyEvents, getPendingEvents, updateEventStatus} from '../controllers/eventController.js';
 import { verifyToken, authorizeRoles } from '../middlewares/auth.js';
-
+import {deleteEvent} from '../controllers/eventController.js'
 
 const router = express.Router();
 
@@ -12,6 +12,6 @@ router.get('/', getAllEvents); // ⬅️ This is the new public route
 
 router.get('/pending', verifyToken, authorizeRoles('admin'), getPendingEvents);
 router.patch('/:id/status', verifyToken, authorizeRoles('admin'), updateEventStatus);
-
+router.delete('/:id', verifyToken, authorizeRoles('admin'),deleteEvent)
 
 export default router;
