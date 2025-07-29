@@ -7,9 +7,11 @@ function OrganizerEvents() {
 
   const fetchMyEvents = async () => {
     try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const token = user.token;
       const res = await axios.get('http://localhost:5000/api/events/my-events', {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       setEvents(res.data);

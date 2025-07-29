@@ -4,10 +4,11 @@ import { toast } from 'react-toastify';
 
 function PendingEvents() {
   const [pendingEvents, setPendingEvents] = useState([]);
+  const user = JSON.parse(localStorage.getItem('user'));
+  const token = user.token;
 
   const fetchPendingEvents = async () => {
     try {
-      const token = localStorage.getItem('token');
       const res = await axios.get('http://localhost:5000/api/events/pending', {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -20,7 +21,6 @@ function PendingEvents() {
 
   const handleStatusChange = async (id, status) => {
     try {
-      const token = localStorage.getItem('token');
       await axios.patch(`http://localhost:5000/api/events/${id}/status`, { status }, {
         headers: { Authorization: `Bearer ${token}` },
       });

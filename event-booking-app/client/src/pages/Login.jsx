@@ -22,11 +22,12 @@ function Login() {
   token: res.data.token
 }));
 
-
-      const role = res.data.user.role;
-        if (role === 'admin') navigate('/admin/dashboard');
-        else if (role === 'organizer') navigate('/organizer/dashboard');
-        else navigate('/customer/dashboard');// Adjust if needed
+setTimeout(() => {
+  const role = res.data.user.role;
+  if (role === 'admin') navigate('/admin/dashboard');
+  else if (role === 'organizer') navigate('/organizer/dashboard');
+  else {navigate('/customer/dashboard');}
+}, 100);
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
     }

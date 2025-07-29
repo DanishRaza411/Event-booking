@@ -24,9 +24,11 @@ function OrganizerEventForm() {
     e.preventDefault();
 
     try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const token = user.token;
       await axios.post('http://localhost:5000/api/events', formData, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       toast.success('Event submitted successfully!');

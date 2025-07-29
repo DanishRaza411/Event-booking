@@ -3,8 +3,6 @@ import api from '../../services/api';
 
 function CustomerBookings() {
   const [bookings, setBookings] = useState([]);
-  const token = localStorage.getItem('token');
-
 
   useEffect(() => {
     const fetchBookings = async () => {

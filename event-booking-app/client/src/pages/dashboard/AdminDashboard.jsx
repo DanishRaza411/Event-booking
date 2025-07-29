@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import PendingEvents from '../../components/PendingEvents';
+import DashboardLayout from '../../components/DashboardLayout';
 
 
 
@@ -11,12 +12,16 @@ function AdminDashboard() {
   const [editingUser, setEditingUser] = useState(null);
   const [editData, setEditData] = useState({ name: '', email: '', role: '' });
 
+   
+
   // Fetch all users
   const fetchUsers = async () => {
     try {
+     const admin = JSON.parse(localStorage.getItem('user'));
+      const token = admin.token;
       const res = await axios.get('http://localhost:5000/api/users', {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       setUsers(res.data);
@@ -33,9 +38,11 @@ function AdminDashboard() {
   // Delete user
   const deleteUser = async (id) => {
     try {
+       const admin = JSON.parse(localStorage.getItem('user'));
+      const token = admin.token;
       await axios.delete(`http://localhost:5000/api/users/${id}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       toast.success('User deleted');
@@ -55,12 +62,14 @@ function AdminDashboard() {
   // Save updated user
   const handleUpdateUser = async () => {
     try {
+       const admin = JSON.parse(localStorage.getItem('user'));
+      const token = admin.token;
       await axios.put(
         `http://localhost:5000/api/users/${editingUser}`,
         editData,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -74,9 +83,7 @@ function AdminDashboard() {
   };
 
   return (
-
-    
-<>
+    <DashboardLayout role="admin">
     <PendingEvents />
     <div className="p-8 min-h-screen bg-gray-100">
     
@@ -156,7 +163,7 @@ function AdminDashboard() {
         </tbody>
       </table>
     </div>
-    </>
+    </DashboardLayout>
   );
 }
 

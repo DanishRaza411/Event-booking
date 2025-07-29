@@ -12,9 +12,10 @@ function OrganizerDashboard() {
   // Fetch events created by the current organizer
   const fetchMyEvents = async () => {
     try {
+      const token = user.token;
       const res = await axios.get('http://localhost:5000/api/events/my-events', {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       setEvents(res.data);

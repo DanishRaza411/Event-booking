@@ -10,7 +10,7 @@ function CustomerDashboard() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = user.token;
     axios.get('http://localhost:5000/api/bookings/my-bookings', {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -21,8 +21,6 @@ function CustomerDashboard() {
       console.error('Failed to fetch bookings:', err);
     });
   }, []);
-console.log('Fetched Bookings:', bookings);
-
 
   const totalBookings = bookings.length;
   const totalSpent = bookings.reduce((sum, b) => sum + (b.event?.price || 0) * b.quantity, 0);
