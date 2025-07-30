@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
+import api from '../../services/api'; // Adjust the import based on your project structure
 import DashboardLayout from '../../components/DashboardLayout';
 import { Link } from 'react-router-dom'; // Add this at the top
 
@@ -8,6 +9,9 @@ import { Link } from 'react-router-dom'; // Add this at the top
 function OrganizerDashboard() {
   const user = JSON.parse(localStorage.getItem('user'));
   const [events, setEvents] = useState([]);
+  const [totalAttendees, setTotalAttendees] = useState(0);
+const [earnings, setEarnings] = useState(0);
+
 
   // Fetch events created by the current organizer
   const fetchMyEvents = async () => {
@@ -23,10 +27,36 @@ function OrganizerDashboard() {
       console.error('Error fetching events:', error);
     }
   };
-
+ 
   useEffect(() => {
     fetchMyEvents();
   }, []);
+
+   useEffect(() => {
+  const fetchStats = async () => {
+  try {
+    const token = user.token;
+   const res = await axios.get('http://localhost:5000/api/bookings/organizer-bookings', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+    const bookings = res.data;
+    const attendees = bookings.length;
+    const totalEarnings = bookings.reduce((sum, booking) => sum + (booking.totalPrice || 0), 0);
+
+
+    setTotalAttendees(attendees);
+    setEarnings(totalEarnings);
+  } catch (err) {
+    console.error('Failed to fetch organizer stats:', err);
+  }
+};
+
+
+  fetchStats();
+}, []);
 
   return (
     <DashboardLayout role="organizer">
@@ -48,8 +78,9 @@ function OrganizerDashboard() {
 <Link to="/dashboard/organizer/events">
   <DashboardCard title="My Events" value={events.length} icon="📍" />
 </Link>
-            <DashboardCard title="Total Attendees" value="130" icon="👥" />
-            <DashboardCard title="Earnings" value="$1,250" icon="💵" />
+            <DashboardCard title="Total Attendees" value={totalAttendees} icon="👥" />
+            <DashboardCard title="Earnings" value={`$${earnings.toLocaleString()}`} icon="💵" />
+
           </div>
         </motion.div>
       </div>

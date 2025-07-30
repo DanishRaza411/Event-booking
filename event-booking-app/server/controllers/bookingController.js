@@ -38,4 +38,19 @@ export const getMyBookings = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch bookings' });
   }
 };
+// organizer events booked
+export const getBookingsForOrganizer = async (req, res) => {
+  try {
+    const organizerId = req.user.id;
 
+    const myEvents = await Event.find({ createdBy: organizerId }).select('_id');
+
+    const eventIds = myEvents.map(event => event._id);
+
+    const bookings = await Booking.find({ event: { $in: eventIds } }).populate('event');
+    res.json(bookings);
+  } catch (err) {
+    console.error('Error fetching organizer bookings:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

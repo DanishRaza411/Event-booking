@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import DashboardLayout from '../../components/DashboardLayout';
 
 function OrganizerEventForm() {
   const [formData, setFormData] = useState({
@@ -47,6 +48,9 @@ function OrganizerEventForm() {
   };
 
   return (
+
+        <DashboardLayout role="organizer">
+
     <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow">
       <h2 className="text-2xl font-bold mb-4 text-indigo-600">Submit New Event</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -107,6 +111,7 @@ function OrganizerEventForm() {
         </button>
       </form>
     </div>
+    </DashboardLayout>
   );
 }
 

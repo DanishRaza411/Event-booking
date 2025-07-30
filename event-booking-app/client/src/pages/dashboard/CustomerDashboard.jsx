@@ -28,7 +28,7 @@ function CustomerDashboard() {
 
   return (
     <DashboardLayout role="customer">
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-gray-50 to-blue-50 p-6 sm:p-8 lg:p-12">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-gray-200 to-blue-100 p-6 sm:p-8 lg:p-12">
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
