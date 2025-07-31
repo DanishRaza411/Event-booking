@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import PrivateRoute from '../components/PrivateRoute';
@@ -15,6 +17,8 @@ import CustomerBookings from '../pages/Customer/CustomerBookings';
 import AdminUsers from '../pages/Admin/Users';
 import AdminEvents from '../pages/Admin/Events';
 
+import EventDetails from '../components/EventDetails';
+
 
 
 
@@ -22,6 +26,11 @@ function Routess() {
   return (
     <Router>
       <Routes>
+
+      {/* Home */}
+      <Route path="/" element={<Home />} />
+
+      {/* login and register */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
  
@@ -51,6 +60,11 @@ function Routess() {
         }
       />
 
+      // event details
+      <Route path="/events" element={<BrowseEvents />} />
+      <Route path="/events/:eventId" element={<EventDetails />} />
+
+      // organizer routes
       <Route path="/organizer/submit-event" element={<OrganizerEventForm />} />
       <Route path="/dashboard/organizer/events" element={<OrganizerEvents />} />
 
@@ -65,7 +79,6 @@ function Routess() {
       {/* Optional fallback */}
       <Route path="*" element={<div>404 Not Found</div>} />
       <Route path="/unauthorized" element={<div>Unauthorized Access</div>} />
-      <Route path="/events" element={<BrowseEvents />} />
 
     </Routes>
     </Router>

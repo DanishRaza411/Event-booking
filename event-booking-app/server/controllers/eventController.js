@@ -41,7 +41,7 @@ export const getMyEvents = async (req, res) => {
 
 export const getAllEvents = async (req, res) => {
   try {
-    const events = await Event.find().sort({ date: 1 });
+    const events = await Event.find().populate('createdBy', 'name').sort({ date: 1 });
     res.status(200).json(events);
   } catch (err) {
     console.error('Get Events Error:', err.message);
@@ -89,6 +89,17 @@ export const deleteEvent = async (req, res) => {
   }
 };
 
+// single event details
+export const getSingleEvent = async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ message: 'Event not found' });
+    res.json(event);
+  } catch (err) {
+    console.error('Error fetching single event:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
 
 // export const approveEvent = async (req, res) => {

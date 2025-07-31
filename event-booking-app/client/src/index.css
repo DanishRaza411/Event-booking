@@ -1,1 +1,4 @@
 @import "tailwindcss";
+
+*{
+    font-family: 'Noto Sans', sans-serif;}

@@ -61,7 +61,7 @@ function Events() {
                   <td className="py-2 px-4">{event.title}</td>
                   <td className="py-2 px-4">{new Date(event.date).toLocaleString()}</td>
                   <td className="py-2 px-4">{event.location}</td>
-                  <td className="py-2 px-4">{event.organizer?.name || 'Unknown'}</td>
+                  <td className="py-2 px-4">{event.createdBy?.name || 'Unknown'}</td>
                   <td className="py-2 px-4 capitalize">{event.status}</td>
                   <td className="py-2 px-4">
                     <button
